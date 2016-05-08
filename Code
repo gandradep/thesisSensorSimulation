@@ -1,0 +1,100 @@
+
+float startTimeOn, startTimeOff, timeOn, timeOff;
+
+
+boolean sensor = false;
+boolean wheel =true;
+boolean mechanism = true;
+boolean lights=true;
+
+int state = 1;
+
+
+
+void setup() {
+  size(500, 400);
+}
+void draw() { 
+  background(0);
+  text(timeOn+"  On timer", 10, 50);
+  text(timeOff+ "  Off timer", 10, 70);
+
+
+
+
+  if (sensor) {
+
+    timeOn=(millis()/1000)-startTimeOn;
+    text("Sensor ON", 10, 30);
+
+    if (timeOn>=5) {
+      if (state==1) {
+        wheel=false;
+        state++;
+        startTimeOn=millis()/1000;
+      } else if (state==2) {
+        mechanism=false;
+        state++;
+        startTimeOn=millis()/1000;
+      } else if (state==3) {
+        lights=false;
+        state++;
+      }
+    }
+    startTimeOff=millis()/1000;
+  } else {
+
+    text("Sensor OFF", 10, 30);
+
+    timeOff = (millis()/1000)-startTimeOff ;
+
+
+    if (timeOff>=3) {
+      if (state==2) {
+        wheel=true;
+        startTimeOff=millis()/1000;
+        state--;
+      } else if (state==3) {
+        mechanism=true;
+        state--;
+        startTimeOff=millis()/1000;
+      } else if (state==4) {
+        lights=true;
+        state--;
+        startTimeOff = millis()/1000;
+      }
+    }
+    startTimeOn=millis()/1000;
+  }
+  update();
+}
+
+
+
+
+void keyPressed() {
+  sensor = !sensor;
+
+  //startTimeOn=millis()/1000;
+  //startTimeOff=millis()/1000;
+}
+
+void update() {
+  if (wheel==true) {
+    text("wheel ON", 10, 100);
+  } else {
+    text("wheel OFF", 10, 100);
+  }
+  if (mechanism==true) {
+    text("mechanims ON", 10, 200);
+  } else {
+    text("mechanism OFF", 10, 200);
+  }
+  if (lights==true) {
+    text("lights ON", 10, 300);
+  } else {
+    text("lights OFF", 10, 300);
+  }
+
+  text("state:"+state, 10, height-60);
+}
